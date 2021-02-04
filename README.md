@@ -19,8 +19,16 @@ The data is four years of publically available NOAA offshore buoy data. Unfortun
   2. It has a similar swell fetch to the Scripps buoy. Other buoys to the north and south experience significant island and headland blockage. I believe that including them as model features would only create noise.
   3. It has detailed information going back longer than other nearby buoys. 
   
- The data from the buoys consisted of over a hundred thousand hourly observations indexed by time.
+The data from the buoys consisted of over a hundred thousand hourly observations indexed by time. They recorded many types of information, but only several variables were actually relevant. These were: 
+
+  1. The significant wave height: the average of the top 1/3rd of waves between observations. 
+  2. Average wave period: the average of the wave periods present in the wave spectrum.
+  3. Dominant wave period: the period of the dominant swell
+  4. Mean wave direction: the mean of the different directions of swell hitting the buoy.
   
+ Man, it would be nice if the NOAA kept full spectral data of period, wave direction, and height. It would make predictions so much more accurate. Unfortunately, this is what we have to work with, so we'll make the best of it. 
+  
+ 
   
 ## Cleaning and Exploratory Analysis 
 
@@ -56,7 +64,7 @@ I'm trying out the ADAM algorithm to train this network. Right now, I am not too
 
 
 ## Perceptron Model 2
-This is a neural network with 5 fully connected hidden layers which are all of size 6. Still debugging convergence
+This is a neural network with 5 fully connected hidden layers which are all of size 6. Still debugging convergence.
 
 
 # What are the results? 
