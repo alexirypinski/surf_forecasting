@@ -8,33 +8,16 @@ import torch
 from torch import nn
 
 #path to curr directory
-dir_path = os.path.dirname(os.path.abspath("import_and_clean.ipynb"))
 
-#mutates the data_f to replace float time info to datetime object format
-def createDatetimeColumn(data_f):
-    datetime_col = []
-    num_rows = len(data_f.index)
-    for i in range(0, num_rows):
-        datetime_col += [datetime.datetime(int(data_f["#YY"][i]), int(data_f["MM"][i]), int(data_f["DD"][i]), int(data_f["hh"][i]), int(data_f["mm"][i]))]
-    datetime_col = pd.DataFrame(datetime_col, columns = ['datetime'])
-    data_f = data_f.drop(["#YY", "MM", "DD", "hh", "mm"], 1)
-    data_f = pd.concat([data_f, datetime_col], axis = 1)
-    return data_f
+#read data from scripps buoys for each year
+tp_offshore_data = [readData(dir_path + "/data/46225h201{}.txt".format(x)) for x in range(3, 10)]
+#scripps_offshore_data = [readData(dir_path + "/data/46254h201{}.txt".format(x)) for x in range(5, 10)]
+scripps_nearshore_data = [readData(dir_path + "/data/ljpc1h201{}.txt".format(x)) for x in range(3, 10)]
 
-#reads the raw NoAA data int
-def readData(filePath):
-    #read file
-    data_f = pd.read_csv(filepath_or_buffer = filePath, header = 0, skiprows = [1], dtype = 'float', delim_whitespace=True)
-    return data_f
 
-#delete undesirable columns from the NoAA data for features and make datetime object
-def cleanColumnsFeatures(data_f):
-    cleaned_data_f = data_f[["#YY", "MM", "DD", "hh", "mm", "WVHT", "DPD", "APD", "MWD"]]
-    cleaned_data_f = createDatetimeColumn(cleaned_data_f)
-    return cleaned_data_f
+tp_offshore_cleaned = pd.concat([cleanColumnsFeatures(x) for x in tp_offshore_data], axis = 0, ignore_index=True)
+scripps_nearshore_cleaned = pd.concat([cleanColumnsLabels(x) for x in scripps_nearshore_data], axis = 0, ignore_index=True)
+                            
+tp_offshore_cleaned = min_max_normalize(tp_offshore_cleaned, "MWD")
 
-#delete undesirable columns from the NoAA data for features and make datetime object
-def cleanColumnsLabels(data_f):
-    cleaned_data_f = data_f[["#YY", "MM", "DD", "hh", "mm", "WVHT"]]
-    cleaned_data_f = createDatetimeColumn(cleaned_data_f)
-    return cleaned_data_f
+matched_label_data = matchDataByTime2(tp_offshore_cleaned, scripps_nearshore_cleaned)
