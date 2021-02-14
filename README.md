@@ -60,16 +60,19 @@ This is a neural network with 3 fully connected hidden layers which are all of s
 
 Due to the nature of swell events tending to be quite unique (at least over a period of 5 years), I am extremely worried about overfitting. Thus, I'm using L2 weight regularization. I'm also training the network using a dropout of 0.2 on the input layer and 0.4 on the other layers. 
 
-I'm trying out the ADAM algorithm to train this network. Right now, I am not too worried about tuning the hyperparameters and instead worried about convergence. 
+I'm trying out the RMS algorithm to train this network. Right now, I am not too worried about tuning the hyperparameters and instead worried about convergence. So far, it has been difficult to get the model to break 2300 loss per epoch on the training set. On the other hand, this model is certainly not overfitting the data. 
 
 
-## Perceptron Model 2
-This is a neural network with 5 fully connected hidden layers which are all of size 6. Still debugging convergence.
+## Perceptron Model 2 -- more neurons and more fun
+
+I realized that while training my first perceptron model that 6 neurons per hidden layer is not even close to enough neurons to capture the number of pairwise feature combinations -- of which there are 36. Many of these pairwise feature combinations are likely to be significant in a dataset with only 6 features. Thus, we are compressing our hidden representations by far too much. No wonder the first model was underfitting. 
+
+This is a neural network with 5 fully connected hidden layers which are all of size 36. I hope that this model is wide and deep enough to be useful without overfitting. As of February 11, 2021, I am still attempting to tune this model's hyperparameters. 
 
 
 # What are the results? 
 
-As of February 2, 2021 I am still creating presentable representations of the results in matplotlib. Bear with me. I'll have them soon.
+As of February 10, 2021 I am still creating presentable representations of the results in matplotlib. Bear with me. I'll have them soon.
 
 # Future work
 
